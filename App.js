@@ -1,5 +1,7 @@
 import React from 'react';
 import Main from './components/MainComponent';
+import { Provider } from 'react-redux';
+import { ConfigureStore } from './redux/configureStore';
 
 // For ErrorBoundary
 
@@ -31,11 +33,15 @@ class ErrorBoundary extends React.Component {
 
 //End
 
+const store = ConfigureStore();
+
 export default class App extends React.Component {
     render() {
         return (
             <ErrorBoundary>
-                <Main />
+                <Provider store={store}>
+                    <Main />
+                </Provider>
             </ErrorBoundary>
         );
     }
