@@ -4,6 +4,7 @@ import About from './AboutComponent';
 import Menu from './MenuComponent';
 import Contact from './ContactComponent';
 import Dishdetail from './DishdetailComponent';
+import Reservation from './ReservationComponent';
 import { ScrollView, Text, View, Image, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -143,25 +144,13 @@ function ContactNavigatorScreen(){
                         )
                     
                     })
-                 }
+                }
             />
         </ContactNavigator.Navigator>
     );
 }
 
 const AboutNavigator = createStackNavigator();
-
-const MenuIcon = (props) => {
-    return(
-        <Icon 
-            name='menu' 
-            size={24}
-            color='white'
-            onPress={() =>
-                props.navigation.toggleDrawer()}
-        />
-    );
-}
 
 function AboutNavigatorScreen(){
     return(
@@ -174,14 +163,52 @@ function AboutNavigatorScreen(){
                 component={About}
                 options={
                     ({navigation}) => ({
-                        headerLeft: () => 
-                            <MenuIcon navigation={navigation}/>
+                        headerLeft: () => (
+                            <Icon 
+                                name='menu' 
+                                size={24}
+                                color='white'
+                                onPress={() => 
+                                    navigation.toggleDrawer()}
+                            />
+                        )
+                    
                     })
-                 }
+                }
             />
         </AboutNavigator.Navigator>
 
     )
+}
+
+const ReservationNavigator = createStackNavigator();
+
+function ReservationNavigatorScreen(){
+    return(
+        <ReservationNavigator.Navigator
+            initialRouteName='Reservation'
+            screenOptions={HeaderOptions}
+        >
+            <ReservationNavigator.Screen
+                name="Reserve Table"
+                component={Reservation}
+                options={
+                    ({navigation}) => ({
+                        headerLeft: () => (
+                            <Icon 
+                                name='menu' 
+                                size={24}
+                                color='white'
+                                onPress={() => 
+                                    navigation.toggleDrawer()}
+                            />
+                        )
+                    
+                    })
+                }
+            />
+        </ReservationNavigator.Navigator>
+    );
 }
 
 const MainNavigator = createDrawerNavigator();
@@ -208,7 +235,6 @@ function MainNavigatorDrawer() {
                         />
                     )
                 }}
-
             />
             <MainNavigator.Screen 
                 name="About Us"   
@@ -252,6 +278,20 @@ function MainNavigatorDrawer() {
                     )
                 }}                
             />
+            <MainNavigator.Screen 
+                name="Reserve Table" 
+                component={ReservationNavigatorScreen}
+                options={{
+                    drawerIcon: ({tintColor}) => (
+                        <Icon
+                            name='cutlery'
+                            type='font-awesome'
+                            size={24}
+                            color={tintColor}
+                        />
+                    )
+                }}                
+            />
         </MainNavigator.Navigator>
     );
 }
@@ -277,25 +317,25 @@ class Main extends Component {
 
 const styles = StyleSheet.create({
     container: {
-      flex: 1,
+        flex: 1,
     },
     drawerHeader: {
-      backgroundColor: '#512DA8',
-      height: 140,
-      alignItems: 'center',
-      justifyContent: 'center',
-      flex: 1,
-      flexDirection: 'row'
+        backgroundColor: '#512DA8',
+        height: 140,
+        alignItems: 'center',
+        justifyContent: 'center',
+        flex: 1,
+        flexDirection: 'row'
     },
     drawerHeaderText: {
-      color: 'white',
-      fontSize: 24,
-      fontWeight: 'bold'
+        color: 'white',
+        fontSize: 24,
+        fontWeight: 'bold'
     },
     drawerImage: {
-      margin: 10,
-      width: 80,
-      height: 60
+        margin: 10,
+        width: 80,
+        height: 60
     }
 });  
   
