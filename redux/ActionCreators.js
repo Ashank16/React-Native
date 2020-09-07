@@ -32,6 +32,46 @@ export const addComments = (comments) => ({
     payload: comments
 });
 
+export const addComment = (comment) => ({
+    type: ActionTypes.ADD_COMMENT,
+    payload: comment
+});
+
+export const postComment = (dishId, rating, author, comment) => (dispatch) => {
+
+    const newComment = {
+        author: author,
+        comment: comment,
+        dishId: dishId,
+        rating: rating
+    };
+    newComment.date = new Date().toISOString();
+
+    return fetch(baseUrl + 'comments', {
+        method: 'POST',
+        body: JSON.stringify(newComment),
+        headers: {
+            "Content-Type": "application/json"
+        },
+        credentials: "same-origin"
+    })
+    .then(response => {
+        if(response.ok) {
+            return response;
+        } else {
+            var error = new Error('Error' + response.status + ': ' + response.statusText);
+            error.response = response;
+            throw error;
+        }
+    },
+    error => {
+        throw error;
+    })
+    .then(response => response.json())
+    .then(response => setTimeout(() => {dispatch(addComment(response))}, 2000))
+    .catch(error => { console.log('post comments', errorr.message); alert('Your comment cannot be posted\nError: ' + error.message); });
+};
+
 export const fetchDishes = () => (dispatch) => {
 
     dispatch(dishesLoading());
@@ -149,7 +189,8 @@ export const addLeaders = (leaders) => ({
 export const postFavorite = (dishId) => (dispatch) => {
     setTimeout(() => {
         dispatch(addFavorite(dishId));
-    }, 2000);
+    }, 2000); 
+    // Simulating a call to server to post favorite as we are not implementing it in this course.
 };
 
 export const addFavorite = (dishId) => ({
