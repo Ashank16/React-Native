@@ -66,7 +66,8 @@ class Home extends Component {
             {
                 toValue: 8,
                 duration: 8000,
-                easing: Easing.linear
+                easing: Easing.linear,
+                useNativeDriver: true                    //error was coming without this
             }
         ).start(() => this.animate());                   //Doing the same animation again and again
     }

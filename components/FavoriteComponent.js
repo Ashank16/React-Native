@@ -6,6 +6,7 @@ import { baseUrl } from '../shared/baseUrl';
 import { Loading } from './LoadingComponent';
 import { deleteFavorite } from '../redux/ActionCreators';
 import Swipeable from 'react-native-gesture-handler/Swipeable';
+import * as Animatable from 'react-native-animatable';
 
 const mapStateToProps = state => {
     return{
@@ -65,14 +66,16 @@ class Favorites extends Component {
     
             return (
                 <Swipeable renderRightActions={rightButton}>
-                    <ListItem
-                        key={index}
-                        title={item.name}
-                        subtitle={item.description}
-                        hideChevron={true}
-                        onPress={() => navigate('Dishdetail', { dishId: item.id })}
-                        leftAvatar={{ source: {uri: baseUrl + item.image}}}
-                    />
+                    <Animatable.View animation="fadeInRightBig" duration={2000}> 
+                        <ListItem
+                            key={index}
+                            title={item.name}
+                            subtitle={item.description}
+                            hideChevron={true}
+                            onPress={() => navigate('Dishdetail', { dishId: item.id })}
+                            leftAvatar={{ source: {uri: baseUrl + item.image}}}
+                        />
+                    </Animatable.View>
                 </Swipeable>
             );
         };
