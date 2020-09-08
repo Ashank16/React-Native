@@ -1,16 +1,22 @@
-import React, { Component } from 'react';
-import { FlatList, View, Text } from 'react-native';
-import { ListItem } from 'react-native-elements';
+import React, { Component }from 'react';
+import { View, FlatList, Text, TouchableOpacity, Animated } from 'react-native';
+import  { ListItem } from 'react-native-elements';
 import { connect } from 'react-redux';
-import { Loading } from './LoadingComponent';
 import { baseUrl } from '../shared/baseUrl';
+import { Loading } from './LoadingComponent';
+import { deleteFavorite } from '../redux/ActionCreators';
+import Swipeable from 'react-native-gesture-handler/Swipeable';
 
 const mapStateToProps = state => {
-    return {
-      dishes: state.dishes,
-      favorites: state.favorites
+    return{
+        dishes: state.dishes,
+        favorites: state.favorites
     }
-  }
+}
+
+const mapDispatchToProps = dispatch => ({
+    deleteFavorite: (dishId) => dispatch(deleteFavorite(dishId))
+})
 
 class Favorites extends Component {
 
@@ -19,16 +25,38 @@ class Favorites extends Component {
         const { navigate } = this.props.navigation;
         
         const renderMenuItem = ({item, index}) => {
+            
+            const rightButton = (progress, dragX) => {
+                const scale = dragX.interpolate({
+                    inputRange: [-100, 0],
+                    outputRange: [2, 0],
+                    extrapolate: 'clamp'
+                })
+                return(
+                    <>
+                        <TouchableOpacity onPress={() => this.props.deleteFavorite(item.id)}>
+                            <View style={{flex:1, backgroundColor: 'red', justifyContent: 'center'}}>
+                                <Animated.Text style={{color: 'white', paddingHorizontal: 30,
+                                    fontWeight:'600', transform: [{scale}]}}>
+                                        Delete
+                                </Animated.Text>
+                            </View>
+                        </TouchableOpacity>
+                    </>
+                );
+            }
     
             return (
-                <ListItem
-                    key={index}
-                    title={item.name}
-                    subtitle={item.description}
-                    hideChevron={true}
-                    onPress={() => navigate('Dishdetail', { dishId: item.id })}
-                    leftAvatar={{ source: {uri: baseUrl + item.image}}}
-                />
+                <Swipeable renderRightActions={rightButton}>
+                    <ListItem
+                        key={index}
+                        title={item.name}
+                        subtitle={item.description}
+                        hideChevron={true}
+                        onPress={() => navigate('Dishdetail', { dishId: item.id })}
+                        leftAvatar={{ source: {uri: baseUrl + item.image}}}
+                    />
+                </Swipeable>
             );
         };
 
@@ -56,4 +84,4 @@ class Favorites extends Component {
     }
 }
 
-export default connect(mapStateToProps)(Favorites);
+export default connect(mapStateToProps, mapDispatchToProps)(Favorites);
