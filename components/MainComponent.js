@@ -6,6 +6,7 @@ import Contact from './ContactComponent';
 import Dishdetail from './DishdetailComponent';
 import Reservation from './ReservationComponent';
 import Favorites from './FavoriteComponent';
+import Login from './LoginComponent';
 import { ScrollView, Text, View, Image, StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -243,6 +244,36 @@ function ReservationNavigatorScreen(){
     );
 }
 
+const LoginNavigator = createStackNavigator();
+
+function LoginNavigatorScreen(){
+    return(
+        <LoginNavigator.Navigator
+            initialRouteName='Login'
+            screenOptions={HeaderOptions}
+        >
+            <LoginNavigator.Screen
+                name="Login"
+                component={Login}
+                options={
+                    ({navigation}) => ({
+                        headerLeft: () => (
+                            <Icon 
+                                name='menu' 
+                                size={24}
+                                color='white'
+                                onPress={() => 
+                                    navigation.toggleDrawer()}
+                            />
+                        )
+                    
+                    })
+                }
+            />
+        </LoginNavigator.Navigator>
+    );
+}
+
 const MainNavigator = createDrawerNavigator();
 
 function MainNavigatorDrawer() {
@@ -254,6 +285,20 @@ function MainNavigatorDrawer() {
             }}
             drawerContent={props => <CustomDrawerContentComponent {...props}/>}
         >
+            <MainNavigator.Screen 
+                name="Login"       
+                component={LoginNavigatorScreen} 
+                options={{
+                    drawerIcon: ({tintColor}) => (
+                        <Icon
+                            name='sign-in'
+                            type='font-awesome'
+                            size={24}
+                            color={tintColor}
+                        />
+                    )
+                }}
+            />
             <MainNavigator.Screen 
                 name="Home"       
                 component={HomeNavigatorScreen} 
