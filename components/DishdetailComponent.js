@@ -30,6 +30,13 @@ function RenderDish({ dish, favorite, markFavorite, openCommentForm }) {
         else
             return false;
     };
+    
+    const recognizeComment = ({ moveX, moveY, dx, dy }) => {
+        if ( dx > 200 )
+            return true;
+        else
+            return false;
+    };
 
     const panResponder = PanResponder.create({
         onStartShouldSetPanResponder: (e, gestureState) => {
@@ -41,7 +48,7 @@ function RenderDish({ dish, favorite, markFavorite, openCommentForm }) {
         },
         onPanResponderEnd: (e, gestureState) => {
             console.log("pan responder end", gestureState);
-            if (recognizeDrag(gestureState))
+            if (recognizeDrag(gestureState)) {
                 Alert.alert(
                     'Add to Favorites?',
                     'Are you sure you wish to add ' + dish.name + ' to your favorites?',
@@ -58,7 +65,10 @@ function RenderDish({ dish, favorite, markFavorite, openCommentForm }) {
                     ],
                     { cancelable: false }
                 );
-
+            }
+            else if (recognizeComment(gestureState)) {
+                openCommentForm();
+            }
             return true;
         }
     });
